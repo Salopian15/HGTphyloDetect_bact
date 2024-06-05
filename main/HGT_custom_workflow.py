@@ -336,10 +336,10 @@ def main(bitscore_parameter=100, HGTIndex=0.5, out_pct=0.8) :
             gene_taxonomy_alignment = gene_ranks2lineage
             #gene_superkingdom = gene_taxonomy_alignment['superkingdom']
             #gene_kingdom = gene_taxonomy_alignment['kingdom']
-            gene_phylum = gene_taxonomy_alignment['phylum']
+            #gene_phylum = gene_taxonomy_alignment['phylum']
             #gene_subphylum = gene_taxonomy_alignment['subphylum']
             #gene_class = gene_taxonomy_alignment['class']
-            gene_order = gene_taxonomy_alignment['order']
+            #gene_order = gene_taxonomy_alignment['order']
             #gene_family = gene_taxonomy_alignment['family']
             #gene_genus = gene_taxonomy_alignment['genus']
             #gene_species = gene_taxonomy_alignment['species']
@@ -380,23 +380,23 @@ def main(bitscore_parameter=100, HGTIndex=0.5, out_pct=0.8) :
             # Check if the taxonomic level of the gene is the same as the taxonomic level of the accession
             
             try :
-                if taxonomy_alignment['order'] == gene_order : #replace first with subphylum
-                    recipient_accession.append(accession)
-                    recipient_species.append(taxonomy_alignment['species'])
+                #if taxonomy_alignment['order'] == gene_order : #replace first with subphylum
+                #    recipient_accession.append(accession)
+                #    recipient_species.append(taxonomy_alignment['species'])
                 
                 
-                if taxonomy_alignment['phylum'] == gene_phylum and taxonomy_alignment['order'] != gene_order : #kingdom and subphylum
-                    outgroup_accession.append(accession)
-                    outgroup_species.append(taxonomy_alignment['species'])
+                #if taxonomy_alignment['phylum'] == gene_phylum and taxonomy_alignment['order'] != gene_order : #kingdom and subphylum
+                #    outgroup_accession.append(accession)
+                #    outgroup_species.append(taxonomy_alignment['species'])
                 
                 # This section should work with the taxonomic level selected by the user, need to incorporate at a later date
                 
-                #if taxonomy_alignment[tax_level] != gene_taxonomy_alignment[tax_level] :
-                #    outgroup_accession.append(accession)
-                #    outgroup_species.append(taxonomy_alignment['species'])
-                #if taxonomy_alignment[tax_level] == gene_taxonomy_alignment[tax_level] :
-                #    recipient_accession.append(accession)
-                #    recipient_species.append(taxonomy_alignment['species'])
+                if taxonomy_alignment[tax_level] != gene_taxonomy_alignment[tax_level] :
+                    outgroup_accession.append(accession)
+                    outgroup_species.append(taxonomy_alignment['species'])
+                if taxonomy_alignment[tax_level] == gene_taxonomy_alignment[tax_level] :
+                    recipient_accession.append(accession)
+                    recipient_species.append(taxonomy_alignment['species'])
                 
             #except if taxonomy_alignment[tax_level] == null :
                 #print('Warning: %s taxid not found!' % str(taxid))
@@ -429,7 +429,8 @@ def main(bitscore_parameter=100, HGTIndex=0.5, out_pct=0.8) :
                 max_lineage2ranks = ncbi.get_rank(max_lineage)
                 max_ranks2lineage = dict((rank, taxid) for (taxid, rank) in max_lineage2ranks.items())
                 try :
-                    max_taxid2name = ncbi.get_taxid_translator([max_ranks2lineage['superkingdom'], max_ranks2lineage['phylum'], max_ranks2lineage['order'], max_ranks2lineage['species']])
+                    #max_taxid2name = ncbi.get_taxid_translator([max_ranks2lineage['superkingdom'], max_ranks2lineage['phylum'], max_ranks2lineage['order'], max_ranks2lineage['species']])
+                    max_taxid2name = ncbi.get_taxid_translator([max_ranks2lineage[tax_level]])
                     print(max_taxid2name)
                 except Exception as e:
                     print(Exception, e)
@@ -452,7 +453,8 @@ def main(bitscore_parameter=100, HGTIndex=0.5, out_pct=0.8) :
                 print('Out_pct: %s' % str(Outg_pct))
                 if max_outgroup_bitscore>=bitscore_parameter and float(HGT_index)>=HGTIndex and float(Outg_pct)>=out_pct :
                     print('This is a HGT event')
-                    taxonomy = max_taxid2name[max_ranks2lineage['phylum']] + '/' + max_taxid2name[max_ranks2lineage['class']]
+                    #taxonomy = max_taxid2name[max_ranks2lineage['phylum']] + '/' + max_taxid2name[max_ranks2lineage['class']]
+                    taxonomy = max_taxid2name[max_ranks2lineage[tax_level]]
                     item = [gene, max_outgroup_bitscore, Outg_pct, HGT_index, taxonomy]
                     HGT.append(item)
                 else :
