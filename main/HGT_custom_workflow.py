@@ -305,7 +305,7 @@ def main(bitscore_parameter=100, HGTIndex=0.5, out_pct=0.8) :
             print('MMseqs file exists')
             
         else :
-            accession_number, accesion_bitscore= protein_search(gene, search, geneSeq)
+            accession_number, accession_bitscore= protein_search(gene, search, geneSeq)
             # Need to install blast!
             #with open('./%s.fasta' % gene, 'w') as outfile :
                 #outfile.write('>'+gene+'\n')
